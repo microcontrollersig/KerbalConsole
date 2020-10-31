@@ -26,8 +26,9 @@ Inspirations for custom control panel.
 
 #### Kerbal-specific
 
-KSPSerialIO
-KSPEthernetIO
+[KSPSerialIO](https://forum.kerbalspaceprogram.com/index.php?/topic/60281-hardware-plugin-arduino-based-physical-display-serial-port-io-tutorial-24-11-19/)
+
+[KSPEthernetIO](https://forum.kerbalspaceprogram.com/index.php?/topic/191502-ksp-181-kspethernetio-012-android-client-02-beta-ethernet-based-remote-control/)
 
 #### General
 
