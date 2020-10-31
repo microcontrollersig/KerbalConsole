@@ -8,6 +8,9 @@ Inspirations for custom control panel.
 
 ![Slick Kerbal Console](https://github.com/microcontrollersig/KerbalConsole/raw/main/slick.jpg)
 
+# Parts
+
+[Click here](https://github.com/microcontrollersig/KerbalConsole/tree/main/BOM)
 
 # Design decisions
 
