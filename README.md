@@ -10,6 +10,8 @@ Inspirations for custom control panel.
 
 ![Modular Kerbal Console](https://github.com/microcontrollersig/KerbalConsole/raw/main/3INZrTm.jpeg)
 
+![Shiny Kerbal Console](https://raw.githubusercontent.com/microcontrollersig/KerbalConsole/main/kspc1000.jpg)
+
 # Parts
 
 [Click here](https://github.com/microcontrollersig/KerbalConsole/tree/main/BOM)
