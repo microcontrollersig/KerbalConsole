@@ -30,6 +30,9 @@ Inspirations for custom control panel.
 
 [KSPEthernetIO](https://forum.kerbalspaceprogram.com/index.php?/topic/191502-ksp-181-kspethernetio-012-android-client-02-beta-ethernet-based-remote-control/)
 
+![KSPEthernetIO Android](https://github.com/microcontrollersig/KerbalConsole/raw/main/kspethernetio.jpg)
+
+
 #### General
 
 Use a Atmega32U4 device (Arduino Leonardo, Arduino Pro Micro), can act as virtual Gamepad/keyboard/mouse/joystick.
