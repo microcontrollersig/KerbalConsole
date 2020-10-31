@@ -6,7 +6,7 @@ Inspirations for custom control panel.
 
 ![Nicer Kerbal Console](https://github.com/microcontrollersig/KerbalConsole/raw/main/nicekerbalcontroller.jpg)
 
-
+![Slick Kerbal Console](https://github.com/microcontrollersig/KerbalConsole/raw/main/slick.jpg)
 
 
 
