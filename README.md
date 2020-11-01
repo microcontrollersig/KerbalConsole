@@ -46,3 +46,5 @@ https://www.instructables.com/KerbalController-a-Custom-Control-Panel-for-Rocket
 
 https://www.instructables.com/Arduino-LeonardoMicroATMega32u4-As-GamepadGame-Con/
 
+[DIY Cockpit KSP Controller Hardcore](https://www.youtube.com/watch?v=eBzI0qZArbw)
+
