@@ -48,3 +48,4 @@ https://www.instructables.com/Arduino-LeonardoMicroATMega32u4-As-GamepadGame-Con
 
 [DIY Cockpit KSP Controller Hardcore](https://www.youtube.com/watch?v=eBzI0qZArbw)
 
+[KerbalController Gameplay](https://www.youtube.com/watch?v=9oeIzzsnIAE)
