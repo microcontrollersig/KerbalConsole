@@ -12,6 +12,8 @@ Inspirations for custom control panel.
 
 ![Shiny Kerbal Console](https://raw.githubusercontent.com/microcontrollersig/KerbalConsole/main/kspc1000.jpg)
 
+![LCARS Raspberry Pi](https://github.com/microcontrollersig/KerbalConsole/raw/main/lcars.png)
+
 # Parts
 
 [Click here](https://github.com/microcontrollersig/KerbalConsole/tree/main/BOM)
