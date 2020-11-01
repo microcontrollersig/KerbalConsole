@@ -35,7 +35,7 @@ Inspirations for custom control panel.
 
 #### General
 
-Use a Atmega32U4 device (Arduino Leonardo, Arduino Pro Micro), can act as virtual Gamepad/keyboard/mouse/joystick.
+Use a Atmega32U4 device (Arduino Leonardo, Arduino Pro Micro), appears as a virtual Gamepad/keyboard/mouse/joystick to a Windows/Linux PC.
 
 [Details here](https://www.instructables.com/Arduino-LeonardoMicroATMega32u4-As-GamepadGame-Con/)
 
