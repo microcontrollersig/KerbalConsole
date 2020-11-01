@@ -10,3 +10,8 @@
 
 ![4-axis joystick](https://github.com/microcontrollersig/KerbalConsole/raw/main/BOM/4axisjoystick.jpg)
 
+### Bar Graph
+
+![Bi-color Bar graph](https://github.com/microcontrollersig/KerbalConsole/raw/main/BOM/bicolor-bargraph.jpg)
+
+[From Core Electronics](https://core-electronics.com.au/bi-color-red-green-24-bar-bargraph-w-i2c-backpack-kit.html)
