@@ -8,6 +8,15 @@
 
 [From Aliexpress](https://www.aliexpress.com/item/32918157519.html?spm=a2g0o.productlist.0.0.1d3f2b8bOTPgT6&algo_pvid=9b6a5fbe-d622-4958-af19-c3d003ac2d3b&algo_expid=9b6a5fbe-d622-4958-af19-c3d003ac2d3b-15&btsid=0bb0624016036181849821973e0ad5&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_)
 
+![Mission Switch Cover](https://github.com/microcontrollersig/KerbalConsole/raw/main/BOM/mission-switch-cover.jpg)
+
+[From Core Electronics](https://core-electronics.com.au/missile-switch-cover-red.html)
+
+![Big Dome Button](https://github.com/microcontrollersig/KerbalConsole/raw/main/BOM/bigdome-pushbutton.jpg)
+
+[From Core Electronics](https://core-electronics.com.au/big-dome-push-button-red.html)
+
+
 ### VU Meter
 
 ![VU Meter](https://github.com/microcontrollersig/KerbalConsole/raw/main/BOM/vumeter2.jpg)
