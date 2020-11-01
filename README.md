@@ -46,8 +46,8 @@ Use a Atmega32U4 device (Arduino Leonardo, Arduino Pro Micro), can act as virtua
 
 https://www.instructables.com/KerbalController-a-Custom-Control-Panel-for-Rocket
 
-
-
 [DIY Cockpit KSP Controller Hardcore](https://www.youtube.com/watch?v=eBzI0qZArbw)
 
 [KerbalController Gameplay](https://www.youtube.com/watch?v=9oeIzzsnIAE)
+
+[Flight simulator trim wheel](https://www.youtube.com/watch?v=hSsKeeY5NgM&list=PLC66292176B625E2A&index=24)
