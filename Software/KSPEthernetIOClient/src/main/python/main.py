@@ -47,6 +47,7 @@ class Ui(base_1, form_1):
         self._worker.moveToThread(self._worker_thread)
         self._worker_thread.start()
         self.sasUpdate.connect(self._worker.updateSAS)
+        self.rcsUpdate.connect(self._worker.updateRCS)
         self.connectKSP.connect(self._worker.makeConnection)
         self.disconnectKSP.connect(self._worker.disconnectConnection)
         self.sasUpdate.emit(False)
@@ -74,24 +75,24 @@ class Ui(base_1, form_1):
 
 
     def sendSASMessage(self, newSASValue):
-        sas = 'ON' if newSASValue else 'OFF'
-        print(f"SAS New Value sent to server: {sas}")
+        self.sasUpdate.emit(newSASValue)
 
     def sendRCSMessage(self, newRCSValue):
-        rcs = 'ON' if newRCSValue else 'OFF'
-        print(f"RCS New Value sent to server: {rcs}")
+        self.rcsUpdate.emit(newRCSValue)
+        
 
     def SASClicked(self):
         sas = not self._sas
-        self._sas = sas
+        #self._sas = sas
         self.sendSASMessage(sas)
-        self.updateCss()
+        #self.updateCss()
 
     def RCSClicked(self):
         rcs = not self._rcs
-        self._rcs = rcs
+        print(f"New RCS value:{rcs}")
+        #self._rcs = rcs
         self.sendRCSMessage(rcs)
-        self.updateCss()
+        #self.updateCss()
 
     def updateCss(self):
         sasColor = 'green' if self._sas else 'red'
@@ -141,5 +142,4 @@ if __name__ == '__main__':
     window.show()
     exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
-    
     
