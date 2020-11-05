@@ -8,12 +8,14 @@ IPADDRESS = '192.168.20.107'
 
 class KSP(QObject):
     connected = QtCore.pyqtSignal(bool)
-    
+    statusReport = QtCore.pyqtSignal(dict)
+
     def __init__(self, worker):
         super(KSP, self).__init__()        
         self.connection = None
         self._worker = worker
         self.connected.connect(self._worker.isConnected)
+        self.statusReport.connect(self._worker.statusReport)
 
     def makeConnection(self):
         try:
@@ -42,10 +44,20 @@ class KSP(QObject):
         control = self.connection.space_center.active_vessel.control
         control.rcs = val
     
+
     @QtCore.pyqtSlot()    
     def reportFromKSP(self):
         while True:
-            sleep(1)
+            if self.connection != None:
+                data = self.getData()
+                self.statusReport.emit(data)
+            sleep(0.5)
+
+    def getData(self):
+        if self.connection != None:
+            control = self.connection.space_center.active_vessel.control
+            return {'sas': control.sas, 'rcs': control.rcs}        
+        
 
 class Worker(QObject):
     sasChanged = QtCore.pyqtSignal(bool)
@@ -54,12 +66,13 @@ class Worker(QObject):
     connectKSP = QtCore.pyqtSignal()
     disconnectKSP = QtCore.pyqtSignal()    
     connectedStatus = QtCore.pyqtSignal(bool)
-    
+    latestData = QtCore.pyqtSignal(dict)
 
     def __init__(self, ui):
         super(Worker, self).__init__()
         self.ui = ui
         self.connectedStatus.connect(self.ui.connectionStatusChanged)
+        self.latestData.connect(self.ui.latestData)
         self.createKSPThread()
 
     def createKSPThread(self):
@@ -99,3 +112,6 @@ class Worker(QObject):
         print(f"rcs enters worker: {rcs}")
         self.rcsChanged.emit(rcs)
 
+    @QtCore.pyqtSlot(dict)
+    def statusReport(self, status):
+        self.latestData.emit(status)
