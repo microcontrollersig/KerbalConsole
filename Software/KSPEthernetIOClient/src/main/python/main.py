@@ -73,6 +73,11 @@ class Ui(base_1, form_1):
             self.pushButtonConnect.setText("Connect")
             print("Connection not successful")
 
+    @QtCore.pyqtSlot(dict)       
+    def latestData(self, data):
+        self._sas = data['sas']
+        self._rcs = data['rcs']
+        self.updateCss()
 
     def sendSASMessage(self, newSASValue):
         self.sasUpdate.emit(newSASValue)
