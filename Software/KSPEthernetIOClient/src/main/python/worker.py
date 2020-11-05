@@ -11,8 +11,15 @@ class KSP(QObject):
     def updateSAS(self, val):
         print(f"update sas: {val}")
 
+    @QtCore.pyqtSlot()    
+    def reportFromKSP(self):
+        while True:
+            print("---")
+            sleep(1)
+
 class Worker(QObject):
     sasChanged = QtCore.pyqtSignal(bool)
+    reportKSP = QtCore.pyqtSignal()
 
     def __init__(self):
         super(Worker, self).__init__()
@@ -22,8 +29,10 @@ class Worker(QObject):
         self._ksp = KSP()
         self._ksp_thread = QtCore.QThread()
         self.sasChanged.connect(self._ksp.updateSAS)
+        self.reportKSP.connect(self._ksp.reportFromKSP)
         self._ksp.moveToThread(self._ksp_thread)
-        self._ksp_thread.start()        
+        self._ksp_thread.start()
+        self.reportKSP.emit()
 
     def run(self):
         print("Listening for data from KSP")
