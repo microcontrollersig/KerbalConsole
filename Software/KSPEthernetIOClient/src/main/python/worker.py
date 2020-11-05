@@ -2,10 +2,27 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject
 from time import sleep
+import krpc
+
+IPADDRESS = '192.168.20.107'
 
 class KSP(QObject):
     def __init__(self):
         super(KSP, self).__init__()        
+        self.connection = None
+
+    def makeConnection(self):
+        try:
+            print("Attempting to make connection...")
+            self.connection = krpc.connect(address=IPADDRESS, name="Mohan's GUI Test Program")
+        except:
+            pass
+
+    def disconnect(self):
+        self.connection.close()
+
+    def isConnected(self):
+        return self.connection != None
 
     @QtCore.pyqtSlot(bool)    
     def updateSAS(self, val):
@@ -14,12 +31,12 @@ class KSP(QObject):
     @QtCore.pyqtSlot()    
     def reportFromKSP(self):
         while True:
-            print("---")
             sleep(1)
 
 class Worker(QObject):
     sasChanged = QtCore.pyqtSignal(bool)
     reportKSP = QtCore.pyqtSignal()
+    connectKSP = QtCore.pyqtSignal()
 
     def __init__(self):
         super(Worker, self).__init__()
@@ -30,6 +47,7 @@ class Worker(QObject):
         self._ksp_thread = QtCore.QThread()
         self.sasChanged.connect(self._ksp.updateSAS)
         self.reportKSP.connect(self._ksp.reportFromKSP)
+        self.connectKSP.connect(self._ksp.makeConnection)
         self._ksp.moveToThread(self._ksp_thread)
         self._ksp_thread.start()
         self.reportKSP.emit()
@@ -37,6 +55,10 @@ class Worker(QObject):
     def run(self):
         print("Listening for data from KSP")
         pass
+
+    @QtCore.pyqtSlot()     
+    def makeConnection(self):
+        self.connectKSP.emit()
 
     @QtCore.pyqtSlot(bool)
     def updateSAS(self, sas):
