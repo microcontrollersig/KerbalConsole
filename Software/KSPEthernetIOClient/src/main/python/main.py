@@ -1,8 +1,9 @@
 from fbs_runtime.application_context.PyQt5 import ApplicationContext
 from PyQt5.QtWidgets import QMainWindow,QPushButton
 from PyQt5.QtCore import Qt
-from PyQt5 import uic
+from PyQt5 import uic, QtCore
 import sys
+from worker import Worker
 
 '''
 class Ui(QMainWindow):
@@ -15,13 +16,10 @@ class Ui(QMainWindow):
 
 form_1, base_1 = uic.loadUiType('Buttons/mainwindow.ui')
 
-
-
-
-
-
-
 class Ui(base_1, form_1):
+    sasUpdate = QtCore.pyqtSignal(bool)
+    rcsUpdate = QtCore.pyqtSignal(bool)
+
     def __init__(self):
         super(base_1, self).__init__()
         self.setupUi(self)
@@ -33,9 +31,20 @@ class Ui(base_1, form_1):
         self._sas = False
         self._rcs = False
 
+        self.createWorkerThread()
+
         self.pushButtonConnect.clicked.connect(self.connectClicked)
         self.pushButtonSAS.clicked.connect(self.SASClicked)
         self.pushButtonRCS.clicked.connect(self.RCSClicked)
+
+    def createWorkerThread(self):
+        self._worker = Worker()
+        self._worker_thread = QtCore.QThread()
+        self._worker_thread.started.connect(self._worker.run)
+        self._worker.moveToThread(self._worker_thread)
+        self._worker_thread.start()
+        self.sasUpdate.connect(self._worker.updateSAS)
+        self.sasUpdate.emit(False)
 
     def connectClicked(self):
         print("Waiting for connect...")
@@ -108,3 +117,4 @@ if __name__ == '__main__':
     window.show()
     exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
+ 
