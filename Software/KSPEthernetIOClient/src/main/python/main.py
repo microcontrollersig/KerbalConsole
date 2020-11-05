@@ -40,7 +40,7 @@ class Ui(base_1, form_1):
     def createWorkerThread(self):
         self._worker = Worker()
         self._worker_thread = QtCore.QThread()
-        self._worker_thread.started.connect(self._worker.run)
+        #self._worker_thread.started.connect(self._worker.run)
         self._worker.moveToThread(self._worker_thread)
         self._worker_thread.start()
         self.sasUpdate.connect(self._worker.updateSAS)
