@@ -1,145 +1,101 @@
-from fbs_runtime.application_context.PyQt5 import ApplicationContext
-from PyQt5.QtWidgets import QMainWindow,QPushButton
-from PyQt5.QtCore import Qt
-from PyQt5 import uic, QtCore
-import sys
-from worker import Worker
 
-'''
-class Ui(QMainWindow):
-    def __init__(self):
-        super(Ui, self).__init__()
-        uic.loadUi('Buttons/mainwindow.ui', self)
+from PyQt5 import QtCore
+from PyQt5.QtCore import QObject
+from time import sleep
+import krpc
 
-        self.show()
-'''
+IPADDRESS = '192.168.20.107'
 
-form_1, base_1 = uic.loadUiType('Buttons/mainwindow.ui')
+class KSP(QObject):
+    connected = QtCore.pyqtSignal(bool)
+    
+    def __init__(self, worker):
+        super(KSP, self).__init__()        
+        self.connection = None
+        self._worker = worker
+        self.connected.connect(self._worker.isConnected)
 
-class Ui(base_1, form_1):
-    sasUpdate = QtCore.pyqtSignal(bool)
-    rcsUpdate = QtCore.pyqtSignal(bool)
+    def makeConnection(self):
+        try:
+            print("Attempting to make connection........")
+            #self.connection = krpc.connect(address=IPADDRESS, name="Mohan's GUI Test Program")
+            self.connection = krpc.connect(name="Mohan's GUI Test Program")
+            self.connected.emit(True)        
+        except:
+            self.connected.emit(False)
+
+    def disconnect(self):
+        print("Connection about to be broken....")
+        self.connection.close()
+        self.connected.emit(False)
+
+    def isConnected(self):
+        return self.connection != None
+
+    
+    def updateSAS(self, val):
+        control = self.connection.space_center.active_vessel.control
+        control.sas = val
+
+    
+    def updateRCS(self, val):
+        control = self.connection.space_center.active_vessel.control
+        control.rcs = val
+    
+    @QtCore.pyqtSlot()    
+    def reportFromKSP(self):
+        while True:
+            sleep(1)
+
+class Worker(QObject):
+    sasChanged = QtCore.pyqtSignal(bool)
+    rcsChanged = QtCore.pyqtSignal(bool)    
+    reportKSP = QtCore.pyqtSignal()
     connectKSP = QtCore.pyqtSignal()
-    disconnectKSP = QtCore.pyqtSignal()
+    disconnectKSP = QtCore.pyqtSignal()    
+    connectedStatus = QtCore.pyqtSignal(bool)
     
 
-    def __init__(self):
-        super(base_1, self).__init__()
-        self.setupUi(self)
-        #print(self.centralWidget().findChild(QPushButton, "pushButtonConnect"))
-        #print(self.pushButtonConnect.text())
+    def __init__(self, ui):
+        super(Worker, self).__init__()
+        self.ui = ui
+        self.connectedStatus.connect(self.ui.connectionStatusChanged)
+        self.createKSPThread()
+
+    def createKSPThread(self):
+        self._ksp = KSP(self)
+        self._ksp_thread = QtCore.QThread()
+        self.sasChanged.connect(self._ksp.updateSAS)
+        self.rcsChanged.connect(self._ksp.updateRCS)
+        self.reportKSP.connect(self._ksp.reportFromKSP)
+        self.connectKSP.connect(self._ksp.makeConnection)
+        self.disconnectKSP.connect(self._ksp.disconnect)      
+        self._ksp.moveToThread(self._ksp_thread)
+        self._ksp_thread.start()
+        self.reportKSP.emit()
+
+    def run(self):
+        print("Listening for data from KSP")
+        pass
+
+    @QtCore.pyqtSlot()     
+    def makeConnection(self):
+        self.connectKSP.emit()
+
+    def disconnectConnection(self):
+        self.disconnectKSP.emit()
+
+    @QtCore.pyqtSlot(bool)
+    def isConnected(self, val):
+        self.connectedStatus.emit(val)
+
+    @QtCore.pyqtSlot(bool)
+    def updateSAS(self, sas):
+        print(f"sas enters worker: {sas}")
+        self.sasChanged.emit(sas)
         
-        self._isConnected = False
-        self._isConnecting = False
-        self._sas = False
-        self._rcs = False
+    @QtCore.pyqtSlot(bool)
+    def updateRCS(self, rcs):
+        print(f"rcs enters worker: {rcs}")
+        self.rcsChanged.emit(rcs)
 
-        self.createWorkerThread()
-
-        self.pushButtonConnect.clicked.connect(self.connectClicked)
-        self.pushButtonSAS.clicked.connect(self.SASClicked)
-        self.pushButtonRCS.clicked.connect(self.RCSClicked)
-
-    def createWorkerThread(self):
-        self._worker = Worker(self)
-        self._worker_thread = QtCore.QThread()
-        #self._worker_thread.started.connect(self._worker.run)
-        self._worker.moveToThread(self._worker_thread)
-        self._worker_thread.start()
-        self.sasUpdate.connect(self._worker.updateSAS)
-        self.rcsUpdate.connect(self._worker.updateRCS)
-        self.connectKSP.connect(self._worker.makeConnection)
-        self.disconnectKSP.connect(self._worker.disconnectConnection)
-        self.sasUpdate.emit(False)
-
-    def connectClicked(self):
-        if not self._isConnected:
-            self.connectionStatus.setText('Attempting to connect. Please be patient....')
-            self.connectKSP.emit()
-        else:
-            self.connectionStatus.setText('Attempting to disconnect. Please wait...')
-            self.disconnectKSP.emit()
-        
-    @QtCore.pyqtSlot(bool)       
-    def connectionStatusChanged(self, val):
-        if val:
-            self.connectionStatus.setText("Connected. Fire away!")
-            self._isConnected = True
-            self.pushButtonConnect.setText("Disconnect")
-            print("Connection successful.")
-        else:
-            self.connectionStatus.setText("Server Not Connected. Start KSP.")
-            self._isConnected = False
-            self.pushButtonConnect.setText("Connect")
-            print("Connection not successful")
-
-
-    def sendSASMessage(self, newSASValue):
-        self.sasUpdate.emit(newSASValue)
-
-    def sendRCSMessage(self, newRCSValue):
-        self.rcsUpdate.emit(newRCSValue)
-        
-
-    def SASClicked(self):
-        sas = not self._sas
-        #self._sas = sas
-        self.sendSASMessage(sas)
-        #self.updateCss()
-
-    def RCSClicked(self):
-        rcs = not self._rcs
-        print(f"New RCS value:{rcs}")
-        #self._rcs = rcs
-        self.sendRCSMessage(rcs)
-        #self.updateCss()
-
-    def updateCss(self):
-        sasColor = 'green' if self._sas else 'red'
-        rcsColor = 'green' if self._rcs else 'red'
-        
-        newCss=''
-        
-        if self._sas:
-          newCss += self.produceCssFragment("pushButtonSAS", sasColor)
-        else:
-           newCss += self.produceCssFragment("pushButtonSAS", sasColor)
-
-        if self._rcs:
-          newCss += self.produceCssFragment("pushButtonRCS", rcsColor)
-        else:
-           newCss += self.produceCssFragment("pushButtonRCS", rcsColor)
-
-  
-        self.setStyleSheet(newCss)
-
-
-    def produceCssFragment(self, name, color):
-        return f"""QPushButton#{name},QPushButton#pushButtonRCS {{
-    color: #333;
-    border: 5px solid {color};
-    border-radius: 50px;
-    padding: 5px;
-    background: qradialgradient(
-        cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
-        radius: 1.35, stop: 0 #fff, stop: 1 #bbb
-        );
-    }}
-
-     """
-if __name__ == '__main__':
-    appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
-    window = Ui()
-    #window = QMainWindow()
-    window.resize(620,600)
-    window.setWindowFlags(
-        Qt.Window |
-        Qt.CustomizeWindowHint |
-        Qt.WindowTitleHint |
-        Qt.WindowCloseButtonHint |
-        Qt.WindowStaysOnTopHint    
-    )
-    window.show()
-    exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
-    sys.exit(exit_code)
-    
