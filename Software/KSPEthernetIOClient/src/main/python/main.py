@@ -19,6 +19,8 @@ form_1, base_1 = uic.loadUiType('Buttons/mainwindow.ui')
 class Ui(base_1, form_1):
     sasUpdate = QtCore.pyqtSignal(bool)
     rcsUpdate = QtCore.pyqtSignal(bool)
+    connectKSP = QtCore.pyqtSignal()
+    disconnectKSP = QtCore.pyqtSignal()
 
     def __init__(self):
         super(base_1, self).__init__()
@@ -44,11 +46,15 @@ class Ui(base_1, form_1):
         self._worker.moveToThread(self._worker_thread)
         self._worker_thread.start()
         self.sasUpdate.connect(self._worker.updateSAS)
+        self.connectKSP.connect(self._worker.makeConnection)
         self.sasUpdate.emit(False)
 
     def connectClicked(self):
-        print("Waiting for connect...")
-
+        if not self._isConnected:
+            self.connectKSP.emit()
+        else:
+            self.disconnectKSP.emit()
+        
     def sendSASMessage(self, newSASValue):
         sas = 'ON' if newSASValue else 'OFF'
         print(f"SAS New Value sent to server: {sas}")
@@ -117,3 +123,4 @@ if __name__ == '__main__':
     window.show()
     exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
+    
