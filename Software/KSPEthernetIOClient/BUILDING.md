@@ -14,7 +14,8 @@ https://github.com/mherrmann/fbs-tutorial
 
 FBS simplifies producing final executables.
 
-FBS Manual
+FBS Manual https://build-system.fman.io/manual/
+
 
 # Extra Notes
 
