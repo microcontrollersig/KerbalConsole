@@ -36,21 +36,29 @@ class KSP(QObject):
 
     
     def updateSAS(self, val):
-        control = self.connection.space_center.active_vessel.control
-        control.sas = val
+        try:
+            control = self.connection.space_center.active_vessel.control
+            control.sas = val
+        except:
+            pass
 
     
     def updateRCS(self, val):
-        control = self.connection.space_center.active_vessel.control
-        control.rcs = val
+        try:
+            control = self.connection.space_center.active_vessel.control
+            control.rcs = val
+        except:
+            pass
     
 
     @QtCore.pyqtSlot()    
     def reportFromKSP(self):
         while True:
-            if self.connection != None:
+            try:
                 data = self.getData()
                 self.statusReport.emit(data)
+            except:
+                pass
             sleep(0.5)
 
     def getData(self):
@@ -104,12 +112,12 @@ class Worker(QObject):
 
     @QtCore.pyqtSlot(bool)
     def updateSAS(self, sas):
-        print(f"sas enters worker: {sas}")
+        #print(f"sas enters worker: {sas}")
         self.sasChanged.emit(sas)
         
     @QtCore.pyqtSlot(bool)
     def updateRCS(self, rcs):
-        print(f"rcs enters worker: {rcs}")
+        #print(f"rcs enters worker: {rcs}")
         self.rcsChanged.emit(rcs)
 
     @QtCore.pyqtSlot(dict)
