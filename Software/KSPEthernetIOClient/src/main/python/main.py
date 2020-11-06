@@ -94,7 +94,7 @@ class Ui(base_1, form_1):
 
     def RCSClicked(self):
         rcs = not self._rcs
-        print(f"New RCS value:{rcs}")
+        #print(f"New RCS value:{rcs}")
         #self._rcs = rcs
         self.sendRCSMessage(rcs)
         #self.updateCss()
@@ -136,15 +136,19 @@ if __name__ == '__main__':
     appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
     window = Ui()
     #window = QMainWindow()
-    window.resize(620,600)
+    window.resize(420,600)
     window.setWindowFlags(
         Qt.Window |
         Qt.CustomizeWindowHint |
         Qt.WindowTitleHint |
         Qt.WindowCloseButtonHint |
-        Qt.WindowStaysOnTopHint    
+        Qt.WindowStaysOnTopHint    |
+        Qt.WindowMinimizeButtonHint |
+        Qt.WindowMaximizeButtonHint
     )
+    window.setWindowTitle("krpc Client test")
     window.show()
     exit_code = appctxt.app.exec_()      # 2. Invoke appctxt.app.exec_()
     sys.exit(exit_code)
+
     
