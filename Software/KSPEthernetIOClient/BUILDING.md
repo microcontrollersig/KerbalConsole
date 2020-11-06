@@ -15,3 +15,7 @@ https://github.com/mherrmann/fbs-tutorial
 FBS simplifies producing final executables.
 
 FBS Manual
+
+# Extra Notes
+
+The **Buttons** directory contains the user-interface design built in QT Creator. For FBS to work, if these files are modified, these files need to be copied to src/main/resources/windows (where windows is the OS)
