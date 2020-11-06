@@ -13,3 +13,5 @@ Need to install Python 3.6.8
 https://github.com/mherrmann/fbs-tutorial
 
 FBS simplifies producing final executables.
+
+FBS Manual
